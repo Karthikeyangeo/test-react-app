@@ -1,11 +1,49 @@
 
 import './App.css';
-import { useState } from "react";
+import React,{ useState ,useContext,createContext} from "react";
+import ReactDOM from "react-dom";
+
+const initialState = 10;
+
+const context = createContext({state:40});
+const MyGrandChild =() =>{
+  const {state,setState} = useContext(context);
+  console.log(state,setState);
+
+  const increment =() =>{
+    setState(state+1);
+  }
+
+  return (
+    <div>
+      <button onClick={increment}>increment</button>
+      {state}
+    </div>
+  )
+}
+
+const MyChild=()=>{
+  return(
+    <div>
+      <MyGrandChild />
+    </div>
+  )
+}
+
 
 function App() {
+  const [state,setState] = useState(initialState);
+  const obj ={state:state,setState:setState};
   return (
     <div className="App">
-      <AddColor />
+      <context.Provider value={obj}>
+        <div>
+          <MyChild />
+        </div>
+      </context.Provider>
+
+
+      {/* <AddColor /> */}
     </div>
   );
 }
